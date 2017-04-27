@@ -83,6 +83,27 @@ func update_segtree(arr []int, arr_index int, val int, tree []int) {
 	update(0, len(arr)-1, arr_index, val, tree, 0)
 }
 
+func main() {
+	arr := []int{
+		18, 17, 13, 19, 15, 11, 20, 12, 33, 25,
+	}
+	tree := build_segtree(arr)
+
+	assert(183, query_segtree(arr, 0, len(arr)-1, tree))
+	assert(183, query_segtree(arr, 0, len(arr)+100, tree))
+	assert(18, query_segtree(arr, 0, 0, tree))
+	assert(17, query_segtree(arr, 1, 1, tree))
+	assert(sum(arr, 0, 1), query_segtree(arr, 0, 1, tree))
+	assert(sum(arr, 2, 8), query_segtree(arr, 2, 8, tree))
+	assert(sum(arr, 4, 6), query_segtree(arr, 4, 6, tree))
+	assert(sum(arr, 3, 7), query_segtree(arr, 3, 7, tree))
+
+	update_segtree(arr, 0, 1024, tree)
+
+	assert(1024, query_segtree(arr, 0, 0, tree))
+	assert(1024+17, query_segtree(arr, 0, 1, tree))
+}
+
 func assert(expect int, result int) {
 	if result != expect {
 		panic(fmt.Sprintf("Assert failed!, Expect %d, Get %d", expect, result))
@@ -95,28 +116,4 @@ func sum(arr []int, i int, j int) int {
 		s += arr[k]
 	}
 	return s
-}
-
-func main() {
-	arr := []int{
-		18, 17, 13, 19, 15, 11, 20, 12, 33, 25,
-	}
-	tree := build_segtree(arr)
-
-	fmt.Println("ARR", arr)
-	fmt.Println("TREE", tree)
-	assert(183, query_segtree(arr, 0, len(arr)-1, tree))
-	assert(183, query_segtree(arr, 0, len(arr)+100, tree))
-	assert(18, query_segtree(arr, 0, 0, tree))
-	assert(17, query_segtree(arr, 1, 1, tree))
-	assert(sum(arr, 0, 1), query_segtree(arr, 0, 1, tree))
-	assert(sum(arr, 2, 8), query_segtree(arr, 2, 8, tree))
-	assert(sum(arr, 4, 6), query_segtree(arr, 4, 6, tree))
-	assert(sum(arr, 3, 7), query_segtree(arr, 3, 7, tree))
-
-	update_segtree(arr, 0, 1024, tree)
-	fmt.Println("ARR", arr)
-
-	assert(1024, query_segtree(arr, 0, 0, tree))
-	assert(1024+17, query_segtree(arr, 0, 1, tree))
 }
