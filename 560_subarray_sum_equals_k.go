@@ -2,13 +2,38 @@ package main
 
 import "fmt"
 
-func subarraySumN(nums []int, k int) int {
-	// TODO
-	return 0
+/*
+For every subarray-sum sum(nums[j:k]) = sum(nums[0:k]) - sum(nums[0:j]).
+So we can keep prefix sum's count in `prefixSum`, and note that empty prefix
+subarray's sum is 0.
+
+In the loop, we consider every prefix nums[0:i], The problem is that find how
+many subarray nums[s:i] end at i whose sum is k, We can solve by find how many
+prefix subarray whose sum is `sum-k`.
+*/
+func subarraySum(nums []int, k int) int {
+	// prefix sum -> count
+	prefixSum := make(map[int]int)
+	// empty prefix's sum is 0
+	prefixSum[0]++
+	// current prefix sum
+	sum := 0
+	// subarray sum is k
+	k_count := 0
+	for i := 0; i < len(nums); i++ {
+		sum += nums[i]
+		// how many subarray end at i whose sum is k
+		k_count += prefixSum[sum-k]
+		// one more prefix subarray whose sum is `sum`
+		prefixSum[sum]++
+	}
+	return k_count
 }
 
-// O(n^2)
-func subarraySum(nums []int, k int) int {
+/*
+Another O(n^2) DP solution, Accepted
+*/
+func subarraySumN2(nums []int, k int) int {
 	n := len(nums)
 	if n == 0 {
 		return 0
