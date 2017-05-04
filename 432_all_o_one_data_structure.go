@@ -1,12 +1,29 @@
+/*
+Double linked-list with sentinel & hash implementation
+
+The principle is maintain a double linked-list, and pushes all element with same
+value n into a single hash bucket(n).
+
+	bucket(1) <-> bucket(2) <-> bucket(5) <-> bucket(7)
+
+INC operation, O(1), if key is exists and it's value is n, just move the key to
+the bucket(n+1). Otherwise, push it into bucket(1).
+
+DEC operation, O(1), if key is exists and it's value is n, just move the key to
+the bucket(n-1). Otherwise, do nothing.
+
+MIN operation, O(1), random get a key from head node.
+
+MAX operation, O(1), random get a key from tail node.
+*/
 package main
 
 import "fmt"
 
-// Double linked-list with sentinel & hash implementaion
 type Node struct {
 	prev  *Node
 	next  *Node
-	key   string
+	keys  map[string]bool
 	value int
 }
 
@@ -17,7 +34,12 @@ type AllOne struct {
 
 /** Initialize your data structure here. */
 func Constructor() AllOne {
-	nil_node := &Node{nil, nil, "", 0}
+	nil_node := &Node{
+		prev:  nil,
+		next:  nil,
+		keys:  make(map[string]bool),
+		value: 0,
+	}
 	nil_node.next = nil_node
 	nil_node.prev = nil_node
 	return AllOne{
@@ -30,31 +52,53 @@ func Constructor() AllOne {
 func (this *AllOne) Inc(key string) {
 	n := this.nodemap[key]
 	if n != nil {
-		n.value++
-		// adjust node position
 		next := n.next
-		if next == this.nil_node {
-			return
+		delete(n.keys, key)
+
+		if next.value == n.value+1 {
+			next.keys[key] = true
+			this.nodemap[key] = next
+		} else {
+			o := &Node{
+				prev:  nil,
+				next:  nil,
+				keys:  make(map[string]bool),
+				value: n.value + 1,
+			}
+
+			n.next = o
+			o.prev = n
+			o.next = next
+			next.prev = o
+
+			o.keys[key] = true
+			this.nodemap[key] = o
 		}
-		if n.value > next.value {
-			// exchange n and next
-			this.nodemap[n.key], this.nodemap[next.key] =
-				this.nodemap[next.key], this.nodemap[n.key]
-			n.key, next.key = next.key, n.key
-			n.value, next.value = next.value, n.value
+
+		if len(n.keys) == 0 {
+			// delete node n
+			n.prev.next = n.next
+			n.next.prev = n.prev
 		}
 	} else {
-		n := &Node{
-			prev:  nil,
-			next:  nil,
-			key:   key,
-			value: 1,
+		if head := this.nil_node.next; head.value == 1 {
+			head.keys[key] = true
+			this.nodemap[key] = head
+		} else {
+			o := &Node{
+				prev:  nil,
+				next:  nil,
+				keys:  make(map[string]bool),
+				value: 1,
+			}
+			o.next = this.nil_node.next
+			this.nil_node.next.prev = o
+			this.nil_node.next = o
+			o.prev = this.nil_node
+
+			o.keys[key] = true
+			this.nodemap[key] = o
 		}
-		this.nodemap[n.key] = n
-		n.next = this.nil_node.next
-		this.nil_node.next.prev = n
-		this.nil_node.next = n
-		n.prev = this.nil_node
 	}
 }
 
@@ -62,50 +106,85 @@ func (this *AllOne) Inc(key string) {
 func (this *AllOne) Dec(key string) {
 	n := this.nodemap[key]
 	if n != nil {
-		n.value--
-		if n.value == 0 {
-			// delete from list
+		prev := n.prev
+		delete(n.keys, key)
+
+		if n.value == 1 {
 			delete(this.nodemap, key)
+		} else {
+			if prev.value == n.value-1 {
+				prev.keys[key] = true
+				this.nodemap[key] = prev
+			} else {
+				o := &Node{
+					prev:  nil,
+					next:  nil,
+					keys:  make(map[string]bool),
+					value: n.value - 1,
+				}
+
+				prev.next = o
+				o.prev = prev
+				o.next = n
+				n.prev = o
+
+				o.keys[key] = true
+				this.nodemap[key] = o
+			}
+		}
+
+		if len(n.keys) == 0 {
+			// delete node n
 			n.prev.next = n.next
 			n.next.prev = n.prev
-		} else {
-			// adjust node position
-			prev := n.prev
-			if prev == this.nil_node {
-				return
-			}
-			if n.value < prev.value {
-				// exchange n and prev
-				this.nodemap[n.key], this.nodemap[prev.key] =
-					this.nodemap[prev.key], this.nodemap[n.key]
-				n.key, prev.key = prev.key, n.key
-				n.value, prev.value = prev.value, n.value
-			}
 		}
 	}
 }
 
 /** Returns one of the keys with maximal value. */
 func (this *AllOne) GetMaxKey() string {
-	return this.nil_node.prev.key
+	for key := range this.nil_node.prev.keys {
+		return key
+	}
+	return ""
 }
 
 /** Returns one of the keys with Minimal value. */
 func (this *AllOne) GetMinKey() string {
-	return this.nil_node.next.key
+	for key := range this.nil_node.next.keys {
+		return key
+	}
+	return ""
 }
 
 func (this *AllOne) Inspect() {
 	fmt.Println("----------------------------------------")
 	head := this.nil_node.next
 	for head != this.nil_node {
-		fmt.Printf("%s(%d) ", head.key, head.value)
+		fmt.Printf("%v(%d) ", head.keys, head.value)
 		head = head.next
 	}
 	fmt.Println()
 }
 
-func main() {
+func test1() {
+	obj := Constructor()
+	obj.Inc("hello")
+	obj.Inspect()
+	obj.Inc("world")
+	obj.Inspect()
+	obj.Inc("leet")
+	obj.Inspect()
+	obj.Inc("code")
+	obj.Inspect()
+	obj.Inc("DS")
+	obj.Inspect()
+	obj.Inc("leet")
+	obj.Inspect()
+	fmt.Println(obj.GetMaxKey())
+}
+
+func test2() {
 	obj := Constructor()
 	obj.Inc("a")
 	obj.Inc("b")
@@ -118,4 +197,26 @@ func main() {
 	obj.Inspect()
 	fmt.Println(obj.GetMaxKey())
 	fmt.Println(obj.GetMinKey())
+}
+
+func test3() {
+	obj := Constructor()
+	obj.Inc("a")
+	obj.Inc("b")
+	obj.Dec("b")
+	obj.Dec("b")
+	obj.Inspect()
+	obj.Inc("b")
+	obj.Inspect()
+	obj.Dec("b")
+	obj.Dec("b")
+	obj.Inspect()
+	fmt.Println(obj.GetMaxKey())
+	fmt.Println(obj.GetMinKey())
+}
+
+func main() {
+	// test1()
+	// test2()
+	test3()
 }
