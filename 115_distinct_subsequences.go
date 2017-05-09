@@ -7,7 +7,8 @@ type M struct {
 	t int
 }
 
-// Recursive solution with memoized, 262ms
+// Recursive solution with memoized
+// 262ms
 func distinct(memoized map[M]int, s string, s_beg int, t string, t_beg int) int {
 	if t_beg == len(t) {
 		// t is empty, this is a solution
@@ -37,6 +38,8 @@ func recursiveDistinct(s string, t string) int {
 	return distinct(make(map[M]int), s, 0, t, 0)
 }
 
+// Very easy to translate to Dynamic programming version
+// 6ms
 func numDistinct(s string, t string) int {
 	optimal := [][]int{}
 
@@ -45,19 +48,26 @@ func numDistinct(s string, t string) int {
 	}
 
 	// t is empty, this is a solution
-	for si := 0; si < len(s); si++ {
+	for si := 0; si <= len(s); si++ {
 		optimal[si][len(t)] = 1
 	}
 
 	// s is empty, t is not empty, this is not a solution
-	for ti := 0; ti < len(t)-1; ti++ {
-		optimal[len(si)][ti] = 0
+	for ti := 0; ti <= len(t)-1; ti++ {
+		optimal[len(s)][ti] = 0
 	}
 
-	for si := 1; si < len(s); si++ {
-		for ti := 1; ti < len(t); ti++ {
-			// if s[]
-			// optimal[si][ti] =
+	for si := len(s) - 1; si >= 0; si-- {
+		for ti := len(t) - 1; ti >= 0; ti-- {
+			select_case := 0
+			ignore_case := 0
+			if s[si] == t[ti] {
+				select_case = optimal[si+1][ti+1]
+				ignore_case = optimal[si+1][ti]
+			} else {
+				ignore_case = optimal[si+1][ti]
+			}
+			optimal[si][ti] = select_case + ignore_case
 		}
 	}
 
