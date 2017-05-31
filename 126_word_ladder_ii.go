@@ -167,7 +167,7 @@ func dijkstra(begin string, end string, word_list []string) int {
 	}
 }
 
-func ladderLength(beginWord string, endWord string, wordList []string) int {
+func findLadders(beginWord string, endWord string, wordList []string) [][]string {
 	return dijkstra(beginWord, endWord, wordList)
 }
 
