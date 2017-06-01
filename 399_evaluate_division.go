@@ -26,18 +26,12 @@ func calcEquation(equations [][]string, values []float64, queries [][]string) []
 		y := e[1]
 		k := values[i]
 
-		if adjacency_list[x] == nil {
-			adjacency_list[x] = []Edge{}
-		}
 		// From X to Y
 		adjacency_list[x] = append(adjacency_list[x], Edge{
 			next:   y,
 			weight: k,
 		})
 
-		if adjacency_list[y] == nil {
-			adjacency_list[y] = []Edge{}
-		}
 		// From Y to X
 		adjacency_list[y] = append(adjacency_list[y], Edge{
 			next:   x,
