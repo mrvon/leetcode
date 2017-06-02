@@ -9,7 +9,7 @@ type Trie struct {
 	end      bool
 }
 
-/** Initialize your data structure here. */
+/* Initialize your data structure here. */
 func Create() *Trie {
 	new := &Trie{}
 	new.children = make([]*Trie, 26) // only lowercase letter
@@ -21,7 +21,7 @@ func Constructor() Trie {
 	return *t
 }
 
-/** Inserts a word into the trie. */
+/* Inserts a word into the trie. */
 func (this *Trie) Insert(word string) {
 	if len(word) == 0 {
 		this.end = true
@@ -37,7 +37,7 @@ func (this *Trie) Insert(word string) {
 	child.Insert(word[1:])
 }
 
-/** Returns if the word is in the trie. */
+/* Returns if the word is in the trie. */
 func (this *Trie) Search(word string) bool {
 	if len(word) == 0 {
 		return this.end
@@ -52,7 +52,7 @@ func (this *Trie) Search(word string) bool {
 	}
 }
 
-/** Returns if there is any word in the trie that starts with the given prefix. */
+/* Returns if there is any word in the trie that starts with the given prefix. */
 func (this *Trie) StartsWith(prefix string) bool {
 	if len(prefix) == 0 {
 		return true
