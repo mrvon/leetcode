@@ -21,11 +21,7 @@ func tps(V int, edges [][]int) (bool, []int) {
 		x := e[1]
 		y := e[0]
 
-		if _, is_exist := A[x]; !is_exist {
-			A[x] = []int{}
-		}
 		A[x] = append(A[x], y)
-
 		D[y]++
 	}
 
