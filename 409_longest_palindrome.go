@@ -1,36 +1,49 @@
+/*
+Given a string which consists of lowercase or uppercase letters, find the length
+of the longest palindromes that can be built with those letters.
+
+This is case sensitive, for example "Aa" is not considered a palindrome here.
+
+Note: Assume the length of given string will not exceed 1,010.
+
+
+The answer is very straightforword.
+*/
 package main
 
 import "fmt"
 
 func longestPalindrome(s string) int {
-	dict := make(map[rune]int)
+	dict := make(map[byte]int)
 
-	for _, r := range s {
-		dict[r]++
+	// accumulate byte
+	for i := 0; i < len(s); i++ {
+		dict[s[i]]++
 	}
 
-	var longest_rune rune
-	var longest_size int = 0
-
-	for _, r := range s {
-		c := dict[r]
-		if c%2 != 0 {
-			if c > longest_size {
-				longest_size = c
-				longest_rune = r
+	// find max odd count character
+	var max_byte byte
+	var max_size int = 0
+	for i := 0; i < len(s); i++ {
+		c := s[i]
+		n := dict[c]
+		if n%2 != 0 {
+			if n > max_size {
+				max_size = n
+				max_byte = c
 			}
 		}
 	}
 
-	delete(dict, longest_rune)
+	// delete max odd count character
+	delete(dict, max_byte)
 
-	len := longest_size
-
-	for _, c := range dict {
-		if c%2 == 0 {
-			len += c
+	len := max_size
+	for _, n := range dict {
+		if n%2 == 0 {
+			len += n
 		} else {
-			len += c - 1
+			len += n - 1
 		}
 	}
 
