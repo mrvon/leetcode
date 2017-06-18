@@ -1,5 +1,7 @@
 /*
 Dijkstra Algorithm with Heap
+
+find shortest path length
 */
 package main
 
@@ -173,11 +175,14 @@ func ladderLength(beginWord string, endWord string, wordList []string) int {
 
 func main() {
 	fmt.Println(ladderLength("hit", "cog",
-		[]string{"hot", "dot", "dog", "lot", "log", "cog"}))
+		[]string{"hot", "dot", "dog", "lot", "log", "cog"}),
+	)
 
 	fmt.Println(ladderLength("kit", "cog",
-		[]string{"hot", "dot", "dog", "lot", "log", "cog"}))
+		[]string{"hot", "dot", "dog", "lot", "log", "cog"}),
+	)
 
 	fmt.Println(ladderLength("hit", "cog",
-		[]string{"hot", "dot", "dog", "lot", "log"}))
+		[]string{"hot", "dot", "dog", "lot", "log"}),
+	)
 }
