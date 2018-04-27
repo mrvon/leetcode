@@ -1,54 +1,61 @@
-// Time limit exceeded
+// O(N)
+//
+// first count the number of 1 or 0 grouped consecutively,
+// so transform "01100" to [1,2,2]
+// count of substrings will be min(1,2) + min(2,2) = 3
 package main
 
 import "fmt"
 
-func pattern(l []byte) int {
-	for i := 1; i < len(l); i++ {
-		if l[i] != l[0] {
-			return -1
+func transform(s string) []int {
+	n := []int{}
+
+	curr := s[0]
+	count := 1
+
+	for i := 1; i < len(s); i++ {
+		if curr == s[i] {
+			count++
+		} else {
+			n = append(n, count)
+			curr = s[i]
+			count = 1
 		}
 	}
-	if l[0] == '0' {
-		return 0
-	} else if l[0] == '1' {
-		return 1
-	} else {
-		return -1
-	}
+	n = append(n, count)
+
+	return n
 }
 
-func cbs(s []byte) int {
-	count := 0
-	for size := 1; size*2 <= len(s); size++ {
-		for start := 0; start <= len(s)-size*2; start++ {
-			l := s[start : start+size]
-			r := s[start+size : start+size*2]
-			pl := pattern(l)
-			if pl == -1 {
-				continue
-			}
-			pr := pattern(r)
-			if pr == -1 {
-				continue
-			}
-			if pl == pr {
-				continue
-			}
-			count++
-		}
+func min(x int, y int) int {
+	if x < y {
+		return x
+	} else {
+		return y
 	}
-	return count
 }
 
 func countBinarySubstrings(s string) int {
-	return cbs([]byte(s))
+	n := transform(s)
+
+	count := 0
+
+	for i := 1; i < len(n); i++ {
+		count += min(n[i-1], n[i])
+	}
+
+	return count
 }
 
 func main() {
+	fmt.Println(countBinarySubstrings("1"))
 	fmt.Println(countBinarySubstrings("10"))
+	fmt.Println(countBinarySubstrings("101"))
 	fmt.Println(countBinarySubstrings("1010"))
+	fmt.Println(countBinarySubstrings("0011"))
+	fmt.Println(countBinarySubstrings("1011"))
 	fmt.Println(countBinarySubstrings("10101"))
 	fmt.Println(countBinarySubstrings("101010"))
 	fmt.Println(countBinarySubstrings("00110011"))
+	fmt.Println(countBinarySubstrings("100111001"))
 }
