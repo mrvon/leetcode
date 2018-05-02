@@ -3,7 +3,6 @@ package main
 import "fmt"
 
 func getSkyline(buildings [][]int) [][]int {
-	// TODO
 }
 
 func main() {

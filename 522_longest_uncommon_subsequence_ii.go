@@ -5,18 +5,6 @@ import (
 	"sort"
 )
 
-type ByLength []string
-
-func (s ByLength) Len() int {
-	return len(s)
-}
-func (s ByLength) Swap(i, j int) {
-	s[i], s[j] = s[j], s[i]
-}
-func (s ByLength) Less(i, j int) bool {
-	return len(s[i]) > len(s[j])
-}
-
 func isSubseq(a string, b string) bool {
 	// len(a) >= len(b)
 	j := 0
@@ -35,7 +23,10 @@ func findLUSlength(strs []string) int {
 		return len(strs[0])
 	}
 
-	sort.Sort(ByLength(strs))
+	// Sorted by length
+	sort.Slice(strs, func(i int, j int) bool {
+		return len(strs[i]) > len(strs[j])
+	})
 
 	for i := 0; i < len(strs); i++ {
 		is_en := false

@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 /*
 def find(node, key):
     for char in key:
@@ -50,7 +48,7 @@ func create() *Trie {
 	return new
 }
 
-func find(node *Trie, s string) *Trie {
+func (node *Trie) find(s string) *Trie {
 	for i := 0; i < len(s); i++ {
 		node = node.children[tonumber(s[i])]
 		if node == nil {
@@ -60,7 +58,7 @@ func find(node *Trie, s string) *Trie {
 	return node
 }
 
-func findvalue(node *Trie, s string) string {
+func (node *Trie) findvalue(s string) string {
 	var val []byte
 	for i := 0; i < len(s); i++ {
 		node = node.children[tonumber(s[i])]
@@ -72,7 +70,7 @@ func findvalue(node *Trie, s string) string {
 	return string(val)
 }
 
-func insert(node *Trie, s string) {
+func (node *Trie) insert(s string) {
 	i := 0
 	n := len(s)
 
@@ -94,21 +92,30 @@ func insert(node *Trie, s string) {
 	}
 }
 
+func assert(result bool) {
+	if !result {
+		panic("Assert failed.")
+	}
+}
+
 func main() {
 	trie := create()
 
-	insert(trie, "hello")
-	insert(trie, "world")
-	insert(trie, "quick")
-	insert(trie, "sort")
-	insert(trie, "Definitive")
+	trie.insert("hello")
+	trie.insert("world")
+	trie.insert("quick")
+	trie.insert("sort")
+	trie.insert("Definitive")
 
-	fmt.Println(findvalue(trie, "k"))
-	fmt.Println(findvalue(trie, "quicksort"))
-	fmt.Println(findvalue(trie, "hel"))
-	fmt.Println(findvalue(trie, "hello"))
-	fmt.Println(findvalue(trie, "helloworld"))
-	fmt.Println(findvalue(trie, "Definition"))
-	fmt.Println(findvalue(trie, "Definitive"))
-	fmt.Println(findvalue(trie, "definitive"))
+	assert(trie.findvalue("k") == "")
+	assert(trie.findvalue("quicksort") == "")
+	assert(trie.findvalue("hel") == "hel")
+	assert(trie.findvalue("hello") == "hello")
+	assert(trie.findvalue("helloworld") == "")
+	assert(trie.findvalue("Definition") == "")
+	assert(trie.findvalue("Definitive") == "Definitive")
+	assert(trie.findvalue("definitive") == "")
+
+	assert(trie.find("Definitive") != nil)
+	assert(trie.find("definitive") == nil)
 }

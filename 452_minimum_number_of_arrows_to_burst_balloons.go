@@ -10,34 +10,6 @@ type Balloon struct {
 	e int
 }
 
-type ByStart []Balloon
-
-func (b ByStart) Len() int {
-	return len(b)
-}
-
-func (b ByStart) Swap(i, j int) {
-	b[i], b[j] = b[j], b[i]
-}
-
-func (b ByStart) Less(i, j int) bool {
-	return b[i].s < b[j].s
-}
-
-type ByEnd []Balloon
-
-func (b ByEnd) Len() int {
-	return len(b)
-}
-
-func (b ByEnd) Swap(i, j int) {
-	b[i], b[j] = b[j], b[i]
-}
-
-func (b ByEnd) Less(i, j int) bool {
-	return b[i].e < b[j].e
-}
-
 func findMinArrowShots(points [][]int) int {
 	bs := []Balloon{}
 	be := []Balloon{}
@@ -50,8 +22,15 @@ func findMinArrowShots(points [][]int) int {
 		bm[b] = true
 	}
 
-	sort.Sort(ByStart(bs))
-	sort.Sort(ByEnd(be))
+	// Sorted by start
+	sort.Slice(bs, func(i int, j int) bool {
+		return bs[i].s < bs[j].s
+	})
+
+	// Sorted by end
+	sort.Slice(be, func(i int, j int) bool {
+		return be[i].e < be[j].e
+	})
 
 	count := 0
 
@@ -78,5 +57,4 @@ func findMinArrowShots(points [][]int) int {
 func main() {
 	fmt.Println(findMinArrowShots([][]int{{10, 16}, {2, 8}, {1, 6}, {7, 12}}))
 	fmt.Println(findMinArrowShots([][]int{{1, 16}, {2, 8}, {1, 6}, {7, 12}}))
-
 }
