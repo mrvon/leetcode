@@ -31,23 +31,18 @@ struct ListNode {
 };
 
 bool hasCycle(struct ListNode *head) {
-    if (head == NULL) {
+    if (head == NULL || head->next == NULL) {
         return false;
     }
 
     struct ListNode *slow = head;
-    struct ListNode *fast = head->next;
+    struct ListNode *fast = head;
 
-    while (fast) {
+    while (fast->next && fast->next->next) {
+        slow = slow->next;
+        fast = fast->next->next;
         if (slow == fast) {
             return true;
-        } else {
-            slow = slow->next;
-            fast = fast->next;
-            if (fast == NULL) {
-                break;
-            }
-            fast = fast->next;
         }
     }
 
