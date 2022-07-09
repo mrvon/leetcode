@@ -1,4 +1,6 @@
 /*
+Skips List: A probabilistic Alternative to Balanced Trees
+    by William Pugh
 
 Search (list, searchKey)
     x := list->header
@@ -285,7 +287,7 @@ traverse(struct skip_list* list, void (*func)(int, int)) {
     }
 }
 
-int 
+int
 main() {
     random_init();
 
