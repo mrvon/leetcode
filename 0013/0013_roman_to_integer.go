@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 func romanToInt(s string) int {
 	m := make(map[byte]int)
 	m['I'] = 1
@@ -22,4 +24,15 @@ func romanToInt(s string) int {
 
 	}
 	return sum
+}
+
+func assert(expect int, result int) {
+	if result != expect {
+		panic(fmt.Sprintf("Assert failed!, Expect %d, Get %d", expect, result))
+	}
+}
+
+func main() {
+	assert(romanToInt("III"), 3)
+	assert(romanToInt("IV"), 4)
 }

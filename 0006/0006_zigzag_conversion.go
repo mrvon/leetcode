@@ -65,6 +65,7 @@ func assert(expect string, result string) {
 		panic(fmt.Sprintf("Assert failed!, Expect %s, Get %s", expect, result))
 	}
 }
+
 func main() {
 	assert("PAYPALISHIRING", convert("PAYPALISHIRING", 1))
 	assert("PYAIHRNAPLSIIG", convert("PAYPALISHIRING", 2))

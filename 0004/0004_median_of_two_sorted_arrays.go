@@ -2,12 +2,6 @@ package main
 
 import "fmt"
 
-// Run time complexity should be O(log(m+n)).
-func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
-	// TODO
-	return 0
-}
-
 // Naive solution for test, Run time complexity is O(m+n)
 func median(nums1 []int, nums2 []int) float64 {
 	nums := make([]int, len(nums1)+len(nums2))

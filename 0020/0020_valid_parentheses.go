@@ -61,10 +61,10 @@ func assert(b bool) {
 }
 
 func main() {
-	assert(isValid("{}") == true)
-	assert(isValid("{}[]") == true)
-	assert(isValid("(){}[]") == true)
-	assert(isValid("{]") == false)
-	assert(isValid("({])") == false)
-	assert(isValid("({()})") == true)
+	assert(isValid("{}"))
+	assert(isValid("{}[]"))
+	assert(isValid("(){}[]"))
+	assert(!isValid("{]"))
+	assert(!isValid("({])"))
+	assert(isValid("({()})"))
 }
