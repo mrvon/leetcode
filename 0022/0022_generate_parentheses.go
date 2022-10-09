@@ -4,7 +4,6 @@ import "fmt"
 
 func next_permutation(arr []byte) bool {
 	n := len(arr) - 1
-
 	k := -1
 	for i := n - 1; i >= 0; i-- {
 		if arr[i] < arr[i+1] {
@@ -12,12 +11,10 @@ func next_permutation(arr []byte) bool {
 			break
 		}
 	}
-
 	// last permutation
 	if k == -1 {
 		return false
 	}
-
 	l := n
 	for i := n; i > k; i-- {
 		if arr[k] < arr[i] {
@@ -25,9 +22,7 @@ func next_permutation(arr []byte) bool {
 			break
 		}
 	}
-
 	arr[k], arr[l] = arr[l], arr[k]
-
 	i := k + 1
 	j := n
 	for i < j {
@@ -35,7 +30,6 @@ func next_permutation(arr []byte) bool {
 		i++
 		j--
 	}
-
 	return true
 }
 
@@ -63,10 +57,8 @@ func generateParenthesis(n int) []string {
 	for i := 0; i < n; i++ {
 		arr = append(arr, ')')
 	}
-
-	// This is must be well-formed
+	// this is must be well-formed
 	result = append(result, string(arr))
-
 	for next_permutation(arr) {
 		if is_wellformed(arr) {
 			result = append(result, string(arr))
@@ -75,18 +67,9 @@ func generateParenthesis(n int) []string {
 	return result
 }
 
-func test(n int) {
-	fmt.Printf("------------------------- %d\n", n)
-	result := generateParenthesis(n)
+func main() {
+	result := generateParenthesis(1)
 	for i := 0; i < len(result); i++ {
 		fmt.Println(result[i])
 	}
-}
-
-func main() {
-	test(0)
-	test(1)
-	test(2)
-	test(3)
-	test(4)
 }
