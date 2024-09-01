@@ -44,7 +44,7 @@ func three_way_partition(nums []int, left int, right int, pivot int) (lrange int
 	return
 }
 
-func __quick_sort(nums []int, left int, right int) {
+func qsort(nums []int, left int, right int) {
 	if right-left <= 0 {
 		return
 	}
@@ -52,12 +52,12 @@ func __quick_sort(nums []int, left int, right int) {
 	pivot := median_of_three(nums, left, right)
 
 	lrange, rrange := three_way_partition(nums, left, right, pivot)
-	__quick_sort(nums, left, lrange-1)
-	__quick_sort(nums, rrange+1, right)
+	qsort(nums, left, lrange-1)
+	qsort(nums, rrange+1, right)
 }
 
 func quick_sort(nums []int) {
-	__quick_sort(nums, 0, len(nums)-1)
+	qsort(nums, 0, len(nums)-1)
 }
 
 func test(nums []int) {
